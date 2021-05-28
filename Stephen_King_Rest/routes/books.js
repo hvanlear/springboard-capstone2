@@ -1,7 +1,6 @@
 //Routes for Books
 
 const express = require("express");
-const { restart } = require("nodemon");
 
 const { BadRequestError } = require("../expressError");
 const Book = require("../models/book");
@@ -25,6 +24,20 @@ router.post("/", async function (req, res, next) {
   try {
     const book = await Book.create(req.body);
     return res.status(201).json({ book });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.post("/batch", async function (req, res, next) {
+  try {
+    var i = 0;
+    while (i < req.body.length) {
+      await Book.create(req.body[i]);
+      i++;
+    }
+
+    return res.status(201).send(`Created ${i} records.`);
   } catch (err) {
     return next(err);
   }

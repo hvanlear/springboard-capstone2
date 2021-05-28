@@ -14,27 +14,27 @@
 -- );
 CREATE TABLE books (
  book_id serial,
- handle VARCHAR(40),
- title VARCHAR(40) UNIQUE NOT NULL,
+ handle text,
+ title text UNIQUE NOT NULL,
  pages INTEGER,
- publisher VARCHAR(40),
+ publisher text,
  year INTEGER,
- isbn VARCHAR(40) UNIQUE,
+ isbn text UNIQUE,
  notes VARCHAR(200),
  PRIMARY KEY (book_id)
 );
 
 CREATE TABLE types (
     type_id serial,
-    name VARCHAR(40) UNIQUE NOT NULL,
+    name text UNIQUE NOT NULL,
     PRIMARY KEY (type_id)
 );
 
 CREATE TABLE villains (
     villain_id serial,
     types_id int NOT NULL,
-    name VARCHAR(40) UNIQUE NOT NULL,
-    gender VARCHAR(40),
+    name text UNIQUE NOT NULL,
+    gender text,
     status VARCHAR(20),
     PRIMARY KEY (villain_id),
     FOREIGN KEY (types_id) REFERENCES types(type_id) ON DELETE CASCADE
@@ -50,7 +50,7 @@ CREATE TABLE book_villains (
 
 CREATE TABLE places (
     place_id serial PRIMARY KEY,
-    name VARCHAR(40) UNIQUE NOT NULL
+    name text UNIQUE NOT NULL
 );
 
 CREATE TABLE book_places (

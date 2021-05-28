@@ -4,6 +4,7 @@ const cors = require("cors");
 const { NotFoundError } = require("./expressError");
 
 const bookRoutes = require("./routes/books");
+const villainRoutes = require("./routes/villains");
 
 const morgan = require("morgan");
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.use("/books", bookRoutes);
+app.use("/villains", villainRoutes);
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {

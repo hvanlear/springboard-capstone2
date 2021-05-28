@@ -26,3 +26,5 @@ class Villain {
     return villain;
   }
 }
+
+module.exports = Villain;

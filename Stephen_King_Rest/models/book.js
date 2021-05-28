@@ -6,22 +6,23 @@ class Book {
   //data should be {handle, title, pages, publisher, publish_year, isbn, notes}
   // throw error if book already exists
 
-  static async create({ handle, title, pages, publisher, year, isbn, notes }) {
+  static async create({ handle, Title, Pages, Publisher, Year, ISBN, Note }) {
+    console.log(`NEW BOOK: ${Title}`);
     const dublicateCheck = await db.query(
       `SELECT handle
             FROM books
-            WHERE handle =  $1`,
-      [handle]
+            WHERE title =  $1`,
+      [Title]
     );
     if (dublicateCheck.rows[0])
-      throw new BadRequestError(`Duplicate Book: ${handle}`);
+      throw new BadRequestError(`Duplicate Book: ${Title}`);
 
     const result = await db.query(
       `INSERT INTO books 
         (year, title, handle, publisher, isbn, pages, notes)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING year AS "publishYear", title, handle, publisher , isbn, pages, notes`,
-      [year, title, handle, publisher, isbn, pages, notes]
+      [Year, Title, handle, Publisher, ISBN, Pages, Note]
     );
     const book = result.rows[0];
 
