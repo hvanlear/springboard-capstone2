@@ -71,4 +71,4 @@ df_fixed.insert(2, "handle", handles, True)
 
 df_fixed.to_json(r'booksData.json', orient='records')
 
-# print(handles)
+print(handles)
