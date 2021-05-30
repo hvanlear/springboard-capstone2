@@ -1,3 +1,4 @@
+from posixpath import split
 from bs4 import BeautifulSoup
 from lxml.html import fromstring
 import re
@@ -26,7 +27,7 @@ wiki_tables = soup.find_all('table', table_class)
 tmp = wiki_tables[0].find_all('tr')
 first = tmp[0]
 all_rows = tmp[1:-1]
-print(first)
+
 
 headers = [header.get_text().lower().rstrip("\n")
            for header in first.find_all('th')]
@@ -48,27 +49,34 @@ if rowspan:
         for j in range(1, i[2]):
             results[i[0]+j].insert(i[1], i[3])
 
-print(headers)
 
 df = pd.DataFrame(data=results, columns=headers)
 
-# A few items were flawed, went in and manually fixed
+# A few items were flawed, went in and manually fixed in the original json file
+# we are using that edited json file here as a master copy that is added onto/edited
 df_fixed = pd.read_json("books.json")
+
 
 # creating a handles array for url end point
 # isolate the titles column
-raw_handles = df_fixed.iloc[:, 1]
+unformatted_titles = df_fixed.iloc[:, 1]
+unformatted_notes = df_fixed.iloc[:, 5]
 base_handles = []
+# splitting the note string on the ; and making it an array of notes
+split_notes = [note.split(';') for note in unformatted_notes]
+df_fixed["Note"] = split_notes
+
 
 # remove non alphanumeric characters
-for handle in raw_handles:
-    base_handles.append(re.sub(r'\W+', ' ', handle.lower()))
+for title in unformatted_titles:
+    base_handles.append(re.sub(r'\W+', ' ', title.lower()))
 # repalce spaces with hpyhen
 handles = [h.replace(' ', '-') for h in base_handles]
 # insert new
 df_fixed.insert(2, "handle", handles, True)
 
 
-df_fixed.to_json(r'booksData.json', orient='records')
+# changes the notes string into array split on the semi colon
 
-print(handles)
+
+df_fixed.to_json(r'booksData.json', orient='records')

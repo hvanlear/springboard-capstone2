@@ -6,4 +6,4 @@ CREATE DATABASE stephen_king_rest;
 \connect stephen_king_rest
 
 \i sk-schema.sql
--- \i sk-seed.sql
+\i sk-seed.sql

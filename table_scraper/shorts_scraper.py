@@ -41,22 +41,22 @@ def scrape_table(wikiTable):
     tmp = wikiTable.find_all('tr')
     all_rows = tmp[1:]
 
-    results = [[data.get_text().rstrip("\n") for data in row.find_all('td')]
+    results = [[data.get_text().rstrip("\n").replace('"', '') for data in row.find_all('td')]
                for row in all_rows]
 
-    rowspan = []
+    # rowspan = []
 
-    for no, tr in enumerate(all_rows):
-        tmp = []
-        for td_no, data in enumerate(tr.find_all('td')):
-            if data.has_attr('rowspan'):
-                rowspan.append(
-                    (no, td_no, int(data['rowspan']), data.get_text().rstrip("\n")))
+    # for no, tr in enumerate(all_rows):
+    #     tmp = []
+    #     for td_no, data in enumerate(tr.find_all('td')):
+    #         if data.has_attr('rowspan'):
+    #             rowspan.append(
+    #                 (no, td_no, int(data['rowspan']), data.get_text().rstrip("\n")))
 
-    if rowspan:
-        for i in rowspan:
-            for j in range(1, i[2]):
-                results[i[0]+j].insert(i[1], i[3])
+    # if rowspan:
+    #     for i in rowspan:
+    #         for j in range(1, i[2]):
+    #             results[i[0]+j].insert(i[1], i[3])
 
     # print(headers)
 
@@ -68,7 +68,7 @@ results = [scrape_table(table) for table in wiki_tables]
 
 for i, value in enumerate(results, start=0):
     for row in value:
-        row.append(dates[i])
+        row.append(int(dates[i]))
     combined = combined + value
 
 print(combined)

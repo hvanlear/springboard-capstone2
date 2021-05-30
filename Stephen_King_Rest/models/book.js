@@ -32,9 +32,8 @@ class Book {
   static async findAll() {
     const rawbooks = await db.query(
       `SELECT
-          b.book_id AS id, b.handle, b.title, b.pages, b.publisher, b.year, b.isbn, b.notes
-        FROM books b
-        `
+          b.book_id AS id, b.handle, b.title, b.pages, b.publisher, b.year, b.isbn, b.notes, b.updated_at, b.created_at
+        FROM books b`
     );
 
     const bookData = await Promise.all(
@@ -60,7 +59,15 @@ class Book {
     );
 
     const books = bookData.map((book) => ({
-      ...book,
+      // ...book,
+      id: book.id,
+      handle: book.handle,
+      title: book.title,
+      pages: book.pages,
+      publisher: book.publisher,
+      year: book.year,
+      isbn: book.isbn,
+      notes: book.notes,
       villains: book.villains.rows.map((villain) => ({
         id: villain.id,
         villainName: villain.name,
@@ -69,6 +76,8 @@ class Book {
         id: place.id,
         placeName: place.name,
       })),
+      updated_at: book.updated_at,
+      created_at: book.created_at,
     }));
 
     return books;

@@ -12,6 +12,15 @@
 --  isbn TEXT UNIQUE,
 --  notes TEXT
 -- );
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
 CREATE TABLE books (
  book_id serial,
  handle text,
@@ -20,9 +29,16 @@ CREATE TABLE books (
  publisher text,
  year INTEGER,
  isbn text UNIQUE,
- notes VARCHAR(200),
- PRIMARY KEY (book_id)
+ notes TEXT [],
+ PRIMARY KEY (book_id),
+ updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+ created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON books
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
 
 CREATE TABLE types (
     type_id serial,
@@ -60,6 +76,8 @@ CREATE TABLE book_places (
     REFERENCES books ON DELETE CASCADE,
   PRIMARY KEY (place_id, book_id)
 );
+
+
 
 /* 
 Originally published links to publisher table

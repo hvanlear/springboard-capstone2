@@ -1,9 +1,9 @@
 INSERT INTO books 
     (handle, title, pages, publisher, year, isbn, notes)
 VALUES
-    ('it', 'It', 799, 'DoubleDay', 1975, '123445-25235', 'NOTES HERE'),
-    ('the-stand', 'The Stand', 888, 'DoubleDay', 1980, '123445-3424', 'NOTES HERE'),
-    ('the-gunslinger', 'The Gunslinger', 334, 'Viking', 1965, '145678', 'NOTES HERE');
+    ('it', 'It', 799, 'DoubleDay', 1975, '123445-25235', ARRAY['NOTE 1', 'NOTE 2']),
+    ('the-stand', 'The Stand', 888, 'DoubleDay', 1980,'12345566-123', ARRAY['NOTE 1', 'NOTE 2']),
+    ('the-gunslinger', 'The Gunslinger', 334, 'Viking', 1965, '145678', ARRAY['NOTE 1', 'NOTE 2']);
 
 INSERT INTO types 
     (name)
