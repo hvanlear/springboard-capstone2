@@ -23,20 +23,9 @@ Any error in query parameter values will likely respond with an empty array `[]`
 ## Getting Started
 I welcome any and all contributions! Feel free to submit a Pull Request with your changes to make this a better API for everyone!
 
-1. Clone and download [GitHub repo](https://github.com/paigeegorry/last-airbender-api)
+1. Clone and download [GitHub repo]
 1. Install dependencies:\
 `npm i`
-
-3. Run scripts:\
-`npm run lint`\
-`npm run pretest`\
-`npm run test`\
-`npm run test:watch`\
-`npm run start` (start node server)\
-`npm run start:watch` (start nodemon server)\
-`npm run seed` (seed database)\
-`npm run drop` (drop MongoDB)\
-`npm run db-load-all` (drop db and load seed data from scratch)
 
 ## License
 Standard [MIT](/LICENSE.md)
