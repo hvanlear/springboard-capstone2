@@ -7,7 +7,7 @@
 This is an open-source API that provides Novela, Short Story, character(*currently limited to villains*), and setting information for the written works of Stephen King. This information is publicly sourced; I do not claim to own.
 
 ## Technologies used
-Node.js, [PostGres](https://www.postgresql.org/), [Express](https://www.npmjs.com/package/express), [Jest](https://www.npmjs.com/package/jest), [SuperTest](https://www.npmjs.com/package/supertest), [nodemon](https://www.npmjs.com/package/nodemon), [dotenv](https://www.npmjs.com/package/dotenv), [Node Postgres](https://node-postgres.com/), [morgan](https://www.npmjs.com/package/morgan), [SuperAgent](https://www.npmjs.com/package/superagent), [node-html-parser](https://www.npmjs.com/package/node-html-parser)
+[Node.js](https://nodejs.org/en/), [PostGres](https://www.postgresql.org/), [Express](https://www.npmjs.com/package/express), [Jest](https://www.npmjs.com/package/jest), [SuperTest](https://www.npmjs.com/package/supertest), [nodemon](https://www.npmjs.com/package/nodemon), [dotenv](https://www.npmjs.com/package/dotenv), [Node Postgres](https://node-postgres.com/), [morgan](https://www.npmjs.com/package/morgan), [SuperAgent](https://www.npmjs.com/package/superagent), [node-html-parser](https://www.npmjs.com/package/node-html-parser)
 
 ## Routes
 _All routes are GET routes_
