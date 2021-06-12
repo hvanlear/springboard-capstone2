@@ -51,32 +51,32 @@ if rowspan:
 
 
 df = pd.DataFrame(data=results, columns=headers)
+# df.to_json(r'books.json', orient='records')
+
 
 # A few items were flawed, went in and manually fixed in the original json file
-# we are using that edited json file here as a master copy that is added onto/edited
-df_fixed = pd.read_json("books.json")
+# we are using that edited json file here as a master copy that used as the starting point
+# for future iterations of the data
 
 
-# creating a handles array for url end point
-# isolate the titles column
-unformatted_titles = df_fixed.iloc[:, 1]
-unformatted_notes = df_fixed.iloc[:, 5]
-base_handles = []
-# splitting the note string on the ; and making it an array of notes
-split_notes = [note.split(';') for note in unformatted_notes]
-df_fixed["Note"] = split_notes
+def formatData(jsonFile, titleCol, notesCol, newJsonFileName):
+
+    df = pd.read_json(jsonFile)
+    # creating a handles array
+    # isolate the titles column
+    titles = df.iloc[:, titleCol]
+    notes = df.iloc[:, notesCol]
+    # splitting the note string on the ; and making it an array of notes
+    split_notes = [note.split(';') for note in notes]
+
+    df.iloc[:, notesCol] = split_notes
+
+    # remove non alpha characters
+    base_handles = [(re.sub(r'\W+', ' ', title.lower())) for title in titles]
+    handles = [h.replace(' ', '-') for h in base_handles]
+
+    df.insert(2, "handle", handles, True)
+    df.to_json(newJsonFileName, orient='records')
 
 
-# remove non alphanumeric characters
-for title in unformatted_titles:
-    base_handles.append(re.sub(r'\W+', ' ', title.lower()))
-# repalce spaces with hpyhen
-handles = [h.replace(' ', '-') for h in base_handles]
-# insert new
-df_fixed.insert(2, "handle", handles, True)
-
-
-# changes the notes string into array split on the semi colon
-
-
-df_fixed.to_json(r'booksData.json', orient='records')
+formatData("books.json", 1, 5, "booksTempData.json")

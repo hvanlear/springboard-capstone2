@@ -16,6 +16,15 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/:id", async (req, res, next) => {
+  try {
+    const book = await Book.get(req.params.id);
+    return res.json({ book });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 // POST / {book} => {book}
 
 //TODO add authentication and schema validation

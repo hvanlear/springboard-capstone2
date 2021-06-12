@@ -6,12 +6,14 @@ VALUES
     ('the-gunslinger', 'The Gunslinger', 334, 'Viking', 1965, '145678', ARRAY['NOTE 1', 'NOTE 2']);
 
 INSERT INTO types 
-    (name)
+    (type)
 VALUES
     ('Humanoid'),
     ('Vampire'),
     ('Creature'),
     ('Alien'),
+    ('Group'),
+    ('Technology'),
     ('Animal');
 
 INSERT INTO villains

@@ -4,6 +4,7 @@ import re
 import csv
 import pandas as pd
 import urllib3
+from books import formatData
 
 import requests
 
@@ -34,7 +35,7 @@ first = wiki_tables[0].find_all('tr')
 
 headers = [header.get_text().lower().rstrip("\n")
            for header in first[0].find_all('th')]
-headers.append('Date')
+headers.append('date')
 
 
 def scrape_table(wikiTable):
@@ -71,7 +72,13 @@ for i, value in enumerate(results, start=0):
         row.append(int(dates[i]))
     combined = combined + value
 
-print(combined)
-
 df = pd.DataFrame(data=combined, columns=headers)
-df.to_json(r'shortsData.json', orient='records')
+
+# This is commented out becuase we dont want the scrip to run again
+# TODO reforat the about code to a function
+
+# df.to_json(r'shorts.json', orient='records')
+
+# Format function called to split the notes up and add the handle field
+# jsonFile, titleCol, notesCol, newJsonFileName
+formatData("/JSON/shorts.json", 0, 4, "/JSON/shortsTempData.json")

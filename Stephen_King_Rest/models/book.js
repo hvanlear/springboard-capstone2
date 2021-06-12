@@ -86,6 +86,61 @@ class Book {
     //   console.log(bookData[i].villians.rows);
     // }
   }
+
+  //get a single book given ID
+
+  static async get(id) {
+    const rawbook = await db.query(
+      `SELECT
+      b.book_id AS id, b.handle, b.title, b.pages, b.publisher, b.year, b.isbn, b.notes, b.updated_at, b.created_at
+      FROM books b
+      WHERE b.book_id = $1`,
+      [id]
+    );
+
+    const bookData = {
+      ...rawbook.rows[0],
+      villains: await db.query(
+        `
+        SELECT v.villain_id AS id, v.name
+        FROM book_villains bv
+        JOIN villains v USING (villain_id)
+        WHERE bv.book_id = ${rawbook.rows[0].id}
+      `
+      ),
+      places: await db.query(
+        `
+        SElECT p.place_id AS id, p.name
+        FROM book_places bp
+        JOIN places p USING (place_id)
+        WHERE bp.book_id = ${rawbook.rows[0].id}
+        `
+      ),
+    };
+    const book = (data) => ({
+      id: data.id,
+      handle: data.handle,
+      title: data.title,
+      pages: data.pages,
+      publisher: data.publisher,
+      year: data.year,
+      isbn: data.isbn,
+      notes: data.notes,
+      villains: data.villains.rows.map((villain) => ({
+        id: villain.id,
+        villainName: villain.name,
+      })),
+      places: data.places.rows.map((place) => ({
+        id: place.id,
+        placeName: place.name,
+      })),
+      updated_at: data.updated_at,
+      created_at: data.created_at,
+    });
+    return book(bookData);
+  }
 }
+
+Book.get(1);
 
 module.exports = Book;

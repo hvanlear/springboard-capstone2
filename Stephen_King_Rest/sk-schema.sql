@@ -42,7 +42,7 @@ EXECUTE PROCEDURE trigger_set_timestamp();
 
 CREATE TABLE types (
     type_id serial,
-    name text UNIQUE NOT NULL,
+    type text UNIQUE NOT NULL,
     PRIMARY KEY (type_id)
 );
 
@@ -53,7 +53,7 @@ CREATE TABLE villains (
     gender text,
     status VARCHAR(20),
     PRIMARY KEY (villain_id),
-    FOREIGN KEY (types_id) REFERENCES types(type_id) ON DELETE CASCADE
+    FOREIGN KEY (types_id ) REFERENCES types(type_id ) ON DELETE CASCADE  
 );
 
 CREATE TABLE book_villains (
