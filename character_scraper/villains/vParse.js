@@ -41,7 +41,7 @@ const villainParse = async (url) => {
     });
     if (!("status" in villain)) villain.status = "Alive";
     if (!("type" in villain)) villain.type = "Humans";
-    villain.appearsIn = "";
+    villain.appearsIn = [];
     villain.data = catData;
 
     if (!flag) return undefined;

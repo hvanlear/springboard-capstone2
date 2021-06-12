@@ -14,3 +14,6 @@ When the scraped data comes back -
 if the villain has a matching handle then create a new pair that can be input into the reference table route
 
 This could also be done for the Types
+
+Long term
+Add villain places
