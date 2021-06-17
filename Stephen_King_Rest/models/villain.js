@@ -75,6 +75,8 @@ class Villain {
       [id]
     );
 
+    if (!rawVillain.rows[0]) throw new NotFoundError(`No Villain Found`);
+
     const villainData = {
       ...rawVillain.rows[0],
       books: await db.query(
@@ -128,7 +130,5 @@ class Villain {
     if (!villain) throw new NotFoundError(`No Villain: ${id}`);
   }
 }
-
-Villain.get(1);
 
 module.exports = Villain;

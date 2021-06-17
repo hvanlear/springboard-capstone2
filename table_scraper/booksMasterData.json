@@ -245,8 +245,8 @@
   },
   {
     "Year": 1990,
-    "Title": "The Stand",
-    "handle": "the-stand",
+    "Title": "The Stand Uncut",
+    "handle": "the-stand-uncut",
     "Publisher": "Doubleday",
     "ISBN": "978-0-385-19957-5",
     "Pages": 1152,
@@ -286,7 +286,7 @@
     "Publisher": "Viking",
     "ISBN": "978-0-670-84650-4",
     "Pages": 352,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 1992,
@@ -390,7 +390,7 @@
     "Publisher": "Scribner",
     "ISBN": "978-0-684-86762-5",
     "Pages": 224,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 2001,
@@ -399,7 +399,7 @@
     "Publisher": "Scribner",
     "ISBN": "978-0-743-21138-3",
     "Pages": 620,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 2001,
@@ -464,7 +464,7 @@
     "Publisher": "Hard Case Crime",
     "ISBN": "978-0-843-95584-2",
     "Pages": 184,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 2006,
@@ -473,7 +473,7 @@
     "Publisher": "Scribner",
     "ISBN": "978-0-743-29233-7",
     "Pages": 351,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 2006,
@@ -645,7 +645,7 @@
     "Publisher": "Scribner",
     "ISBN": "978-1-98210-231-9",
     "Pages": 144,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 2019,
@@ -666,7 +666,7 @@
     "Publisher": "Hard Case Crime",
     "ISBN": "978-1-78909-649-1",
     "Pages": 256,
-    "Notes": [""]
+    "Notes": []
   },
   {
     "Year": 2021,
@@ -675,6 +675,6 @@
     "Publisher": "Scribner",
     "ISBN": "978-1-982-17361-6",
     "Pages": 528,
-    "Notes": [""]
+    "Notes": []
   }
 ]

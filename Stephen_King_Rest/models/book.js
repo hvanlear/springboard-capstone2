@@ -2,27 +2,26 @@ const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 
 class Book {
-  //create a book, update DB, return new Book Data
-  //data should be {handle, title, pages, publisher, publish_year, isbn, notes}
+  //data should be {handle, title, pages, publisher, year, isbn, notes}
   // throw error if book already exists
 
-  static async create({ handle, Title, Pages, Publisher, Year, ISBN, Note }) {
+  static async create({ handle, Title, Pages, Publisher, Year, ISBN, Notes }) {
     console.log(`NEW BOOK: ${Title}`);
     const dublicateCheck = await db.query(
       `SELECT handle
             FROM books
-            WHERE title =  $1`,
-      [Title]
+            WHERE handle =  $1`,
+      [handle]
     );
     if (dublicateCheck.rows[0])
-      throw new BadRequestError(`Duplicate Book: ${Title}`);
+      throw new BadRequestError(`Duplicate Book: ${handle}`);
 
     const result = await db.query(
       `INSERT INTO books 
         (year, title, handle, publisher, isbn, pages, notes)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING year AS "publishYear", title, handle, publisher , isbn, pages, notes`,
-      [Year, Title, handle, Publisher, ISBN, Pages, Note]
+      [Year, Title, handle, Publisher, ISBN, Pages, Notes]
     );
     const book = result.rows[0];
 
@@ -98,6 +97,8 @@ class Book {
       [id]
     );
 
+    if (!rawbook.rows[0]) throw new NotFoundError(`No Book Found`);
+
     const bookData = {
       ...rawbook.rows[0],
       villains: await db.query(
@@ -140,7 +141,5 @@ class Book {
     return book(bookData);
   }
 }
-
-Book.get(1);
 
 module.exports = Book;

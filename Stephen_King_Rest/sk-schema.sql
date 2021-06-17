@@ -20,7 +20,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
 CREATE TABLE books (
  book_id serial,
  handle text,
@@ -37,6 +36,25 @@ CREATE TABLE books (
 
 CREATE TRIGGER set_timestamp
 BEFORE UPDATE ON books
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_set_timestamp();
+
+CREATE TABLE shorts (
+  short_id serial,
+  title text UNIQUE NOT NULL,
+  type text,
+  handle text,
+  originally_published_in text,
+  collected_in text,
+  notes text [],
+  date integer,
+  PRIMARY KEY (short_id),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON shorts
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_set_timestamp();
 
@@ -62,6 +80,14 @@ CREATE TABLE book_villains (
   book_id INTEGER
     REFERENCES books ON DELETE CASCADE,
   PRIMARY KEY (villain_id, book_id)
+);
+
+CREATE TABLE short_villains (
+  villain_id INTEGER
+    REFERENCES villains ON DELETE CASCADE,
+  short_id INTEGER
+    REFERENCES shorts ON DELETE CASCADE,
+  PRIMARY KEY (villain_id, short_id)
 );
 
 CREATE TABLE places (
