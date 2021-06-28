@@ -51,6 +51,20 @@ class Villain {
       JOIN types ON v.types_id = types.type_id;`
     );
 
+    let whereExpressions = [];
+    let queryValues = [];
+
+    const { type } = searchFilters;
+
+    if (type) {
+      queryValues.push(`%${type}%`);
+      whereExpressions.push(`type ILIKE ${queryValues.length}`);
+    }
+
+    if (whereExpressions.length > 0) {
+      query += ' WHERE ' + whereExpressions.join(' AND ');
+    }
+
     const villainDataAll = await Promise.all(
       rawVillainAll.rows.map(async ({ ...villain }) => ({
         ...villain,
