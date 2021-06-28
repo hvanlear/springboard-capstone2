@@ -13,20 +13,22 @@ VALUES
 INSERT INTO types 
     (type)
 VALUES
-    ('Humanoid'),
-    ('Vampire'),
-    ('Creature'),
-    ('Alien'),
-    ('Group'),
-    ('Technology'),
-    ('Animal');
+    ('Humans'),
+    ('Vampires'),
+    ('Creatures'),
+    ('Aliens'),
+    ('Groups'),
+    ('Vehicles'),
+    ('Ghosts'),
+    ('Animals');
 
 INSERT INTO villains
-    (types_id, name, gender, status)
+    (types_id, name, appears_in, gender, status)
 VALUES
-    (4, 'Penny Wise', 'Unknown', 'deceased'),
-    (1, 'Randall Flag', 'Unknown', 'Unknown'),
-    (1, 'Henery Bowers', 'Male', 'Deceased');
+    (4, 'Penny Wise', ARRAY['it'], 'Unknown', 'deceased'),
+    (1, 'Randall Flag', ARRAY['the-stand', 'the-gunslinger'], 'Unknown', 'Unknown'),
+    (1, 'Henery Bowers', ARRAY['it'], 'Male', 'Deceased'),
+    (1, 'Short Villain', ARRAY['jumper'], 'Male', 'Deceased');
 
 INSERT INTO book_villains
     (villain_id, book_id)
@@ -39,7 +41,7 @@ VALUES
 INSERT INTO short_villains
     (villain_id, short_id)
 VALUES
-    (1,1),
+    (4,1),
     (2,1);
 
 INSERT INTO places

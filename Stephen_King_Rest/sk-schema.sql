@@ -68,6 +68,7 @@ CREATE TABLE villains (
     villain_id serial,
     types_id int NOT NULL,
     name text UNIQUE NOT NULL,
+    appears_in text [],
     gender text,
     status VARCHAR(20),
     PRIMARY KEY (villain_id),

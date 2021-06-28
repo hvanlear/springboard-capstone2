@@ -1,4 +1,5 @@
-const { BadRequestError } = require("../expressError");
+const db = require('../db');
+const { BadRequestError } = require('../expressError');
 /**
  * Helper for making selective update queries.
  *
@@ -18,16 +19,44 @@ const { BadRequestError } = require("../expressError");
  */
 function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   const keys = Object.keys(dataToUpdate);
-  if (keys.length === 0) throw new BadRequestError("No data");
+  if (keys.length === 0) throw new BadRequestError('No data');
 
   const cols = keys.map(
     (colName, idx) => `"${jsToSql[colName] || colName}"=$${idx + 1}`
   );
 
   return {
-    setCols: cols.join(", "),
+    setCols: cols.join(', '),
     values: Object.values(dataToUpdate),
   };
 }
 
-module.exports = { sqlForPartialUpdate };
+function getVillainBookData(query) {
+  const books = db.query(
+    `
+    SELECT b.book_id AS id, b.title
+    FROM book_villains bv
+    JOIN books b USING (book_id)
+    WHERE bv.villain_id = ${query.id}
+    `
+  );
+  return books;
+}
+
+function getVillainShortData(query) {
+  const shorts = db.query(
+    `
+    SELECT s.short_id AS id, s.title
+    FROM short_villains sv
+    JOIN shorts s USING (short_id)
+    WHERE sv.villain_id = ${query.id}
+    `
+  );
+  return shorts;
+}
+
+module.exports = {
+  sqlForPartialUpdate,
+  getVillainBookData,
+  getVillainShortData,
+};

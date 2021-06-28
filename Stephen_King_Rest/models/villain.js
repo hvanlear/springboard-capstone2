@@ -1,13 +1,28 @@
-const { raw, query } = require("express");
-const db = require("../db");
-const { BadRequestError, NotFoundError } = require("../expressError");
-const { sqlForPartialUpdate } = require("../helpers/sql");
+const db = require('../db');
+const { BadRequestError, NotFoundError } = require('../expressError');
+const {
+  sqlForPartialUpdate,
+  getVillainBookData,
+  getVillainShortData,
+} = require('../helpers/sql');
+
+/**
+ * REFACTOR TODO
+ * 1. Create Generic Villain Object for single GET and findAll()
+ *
+ */
 
 class Villain {
   //create villian, updateDB, return new bookdata
   //data should be  types_id, name, gender, status
 
-  static async create({ types_id, name, gender, status }) {
+  static async create({
+    types_id,
+    name,
+    appears_in,
+    gender = 'Unknown',
+    status,
+  }) {
     const duplicateCheck = await db.query(
       `SELECT name
                 from villains
@@ -19,17 +34,17 @@ class Villain {
 
     const result = await db.query(
       ` INSERT INTO villains
-            (types_id, name, gender, status)
-            VALUES ($1, $2, $3, $4)
-            RETURNING types_id AS "type", name, gender, status`,
-      [types_id, name, gender, status]
+            (types_id, name, appears_in, gender, status)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING types_id AS "type", name, appears_in, gender, status`,
+      [types_id, name, appears_in, gender, status]
     );
     const villain = result.rows[0];
     return villain;
   }
 
   //Find all villains
-  static async findAll() {
+  static async findAll(searchFilters = {}) {
     const rawVillainAll = await db.query(
       `SELECT v.villain_id AS id, v.name, v.gender, v.status, types.type, types.type_id
       FROM villains v
@@ -39,28 +54,40 @@ class Villain {
     const villainDataAll = await Promise.all(
       rawVillainAll.rows.map(async ({ ...villain }) => ({
         ...villain,
-        books: await db.query(
-          `
-          SELECT b.book_id AS id, b.title
-          FROM book_villains bv
-          JOIN books b USING (book_id)
-          WHERE bv.villain_id = ${villain.id}
-          `
-        ),
+        books: await getVillainBookData(villain),
+        shorts: await getVillainShortData(villain),
       }))
     );
 
-    const villains = villainDataAll.map((villain) => ({
-      id: villain.id,
-      name: villain.name,
-      gender: villain.gender,
-      status: villain.status,
-      type: { typeId: villain.type_id, type: villain.type },
-      books: villain.books.rows.map((book) => ({
-        id: book.id,
-        title: book.title,
-      })),
-    }));
+    const villains = villainDataAll.map((villain) => {
+      //if the villain is in a book, add the book row, if not then
+      //add the short row
+      const books = villain.books.rows;
+      const shorts = villain.shorts.rows;
+      const v = {
+        id: villain.id,
+        name: villain.name,
+        gender: villain.gender,
+        status: villain.status,
+        type: { typeId: villain.type_id, type: villain.type },
+        appearsIn: books.map((book) => ({
+          id: book.id,
+          type: 'book',
+          title: book.title,
+        })),
+      };
+      //if the villain also or only appears in a short-story
+      if (shorts.length > 0) {
+        for (let short of shorts) {
+          v.appearsIn.push({
+            id: short.id,
+            type: 'short',
+            title: short.title,
+          });
+        }
+      }
+      return v;
+    });
 
     return villains;
   }
@@ -79,27 +106,33 @@ class Villain {
 
     const villainData = {
       ...rawVillain.rows[0],
-      books: await db.query(
-        `
-        SELECT b.book_id AS id, b.title
-        FROM book_villains bv
-        JOIN books b USING (book_id)
-        WHERE bv.villain_id = ${rawVillain.rows[0].id}
-        `
-      ),
+      books: await getVillainBookData(rawVillain.rows[0]),
+      shorts: await getVillainShortData(rawVillain.rows[0]),
     };
 
-    const villain = (data) => ({
-      id: data.id,
-      name: data.name,
-      gender: data.gender,
-      type: { typeId: data.type_id, type: data.type },
-      status: data.status,
-      books: data.books.rows.map((book) => ({
-        id: book.id,
-        title: book.title,
-      })),
-    });
+    const villain = (data) => {
+      const v = {
+        id: data.id,
+        name: data.name,
+        gender: data.gender,
+        type: { typeId: data.type_id, type: data.type },
+        status: data.status,
+        appearsIn: data.books.rows.map((book) => ({
+          id: book.id,
+          title: book.title,
+        })),
+      };
+      if (data.shorts.rows.length > 0) {
+        for (let short of data.shorts.rows) {
+          v.appearsIn.push({
+            id: short.id,
+            type: 'short',
+            title: short.title,
+          });
+        }
+      }
+      return v;
+    };
 
     return villain(villainData);
   }
@@ -114,7 +147,7 @@ class Villain {
 
   static async update(id, data) {
     const { setCols, values } = sqlForPartialUpdate(data, {});
-    const idVarIdx = "$" + (values.length + 1);
+    const idVarIdx = '$' + (values.length + 1);
 
     const querySql = `UPDATE villains
                       SET ${setCols}
