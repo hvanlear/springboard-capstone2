@@ -9,7 +9,7 @@ const router = new express.Router();
 
 router.get('/', async (req, res, next) => {
   const q = req.query;
-
+  console.log(q);
   try {
     const villains = await Villain.findAll(q);
     return res.status(201).json({ villains });

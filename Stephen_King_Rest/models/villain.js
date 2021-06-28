@@ -47,7 +47,7 @@ class Villain {
   static async findAll(searchFilters = {}) {
     let query = `SELECT v.villain_id AS id, v.name, v.gender, v.status, types.type, types.type_id
       FROM villains v
-      JOIN types ON v.types_id = types.type_id;`;
+      JOIN types ON v.types_id = types.type_id`;
 
     let whereExpressions = [];
     let queryValues = [];
@@ -56,14 +56,13 @@ class Villain {
 
     if (type) {
       queryValues.push(`%${type}%`);
-      whereExpressions.push(`type ILIKE ${queryValues.length}`);
+      whereExpressions.push(`type ILIKE $${queryValues.length}`);
     }
 
     if (whereExpressions.length > 0) {
-      query += ' WHERE ' + whereExpressions.join(' AND ');
+      query += ' WHERE ' + whereExpressions;
     }
 
-    query += ' ORDER BY name';
     const rawVillainAll = await db.query(query, queryValues);
 
     const villainDataAll = await Promise.all(
