@@ -14,5 +14,6 @@ lib
 lib64
 __pycache__
 
+admin.sql
 
 node_modules/

@@ -65,6 +65,8 @@ class Villain {
 
     const rawVillainAll = await db.query(query, queryValues);
 
+    if (!rawVillainAll.rows[0]) throw new NotFoundError(`No Villains Found`);
+
     const villainDataAll = await Promise.all(
       rawVillainAll.rows.map(async ({ ...villain }) => ({
         ...villain,

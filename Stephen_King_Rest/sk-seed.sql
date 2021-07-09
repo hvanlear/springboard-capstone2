@@ -1,3 +1,5 @@
+
+
 INSERT INTO books 
     (handle, title, pages, publisher, year, isbn, notes)
 VALUES

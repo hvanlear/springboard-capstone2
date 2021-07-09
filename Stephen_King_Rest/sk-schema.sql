@@ -20,6 +20,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TABLE users (
+  username VARCHAR(25) PRIMARY KEY,
+  password TEXT NOT NULL,
+  is_admin BOOLEAN NOT NULL DEFAULT FALSE
+);
+
 CREATE TABLE books (
  book_id serial,
  handle text,

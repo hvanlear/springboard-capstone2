@@ -1,23 +1,27 @@
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
+const cors = require('cors');
 
-const { NotFoundError } = require("./expressError");
+const { NotFoundError } = require('./expressError');
 
-const bookRoutes = require("./routes/books");
-const villainRoutes = require("./routes/villains");
-const shortRoutes = require("./routes/shorts");
+const { authenticateJWT } = require('./middleware/auth');
+const authRoutes = require('./routes/auth');
+const bookRoutes = require('./routes/books');
+const villainRoutes = require('./routes/villains');
+const shortRoutes = require('./routes/shorts');
 
-const morgan = require("morgan");
+const morgan = require('morgan');
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(morgan("tiny"));
+app.use(morgan('tiny'));
+app.use(authenticateJWT);
 
-app.use("/books", bookRoutes);
-app.use("/villains", villainRoutes);
-app.use("/shorts", shortRoutes);
+app.use('/auth', authRoutes);
+app.use('/books', bookRoutes);
+app.use('/villains', villainRoutes);
+app.use('/shorts', shortRoutes);
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
@@ -26,7 +30,7 @@ app.use(function (req, res, next) {
 
 /** Generic error handler; anything unhandled goes here. */
 app.use(function (err, req, res, next) {
-  if (process.env.NODE_ENV !== "test") console.error(err.stack);
+  if (process.env.NODE_ENV !== 'test') console.error(err.stack);
   const status = err.status || 500;
   const message = err.message;
 
