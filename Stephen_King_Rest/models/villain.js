@@ -1,10 +1,10 @@
-const db = require('../db');
-const { BadRequestError, NotFoundError } = require('../expressError');
+const db = require("../db");
+const { BadRequestError, NotFoundError } = require("../expressError");
 const {
   sqlForPartialUpdate,
   getVillainBookData,
   getVillainShortData,
-} = require('../helpers/sql');
+} = require("../helpers/sql");
 
 /**
  * REFACTOR TODO
@@ -20,7 +20,7 @@ class Villain {
     types_id,
     name,
     appears_in,
-    gender = 'Unknown',
+    gender = "Unknown",
     status,
   }) {
     const duplicateCheck = await db.query(
@@ -60,7 +60,7 @@ class Villain {
     }
 
     if (whereExpressions.length > 0) {
-      query += ' WHERE ' + whereExpressions;
+      query += " WHERE " + whereExpressions;
     }
 
     const rawVillainAll = await db.query(query, queryValues);
@@ -88,7 +88,7 @@ class Villain {
         type: { typeId: villain.type_id, type: villain.type },
         appearsIn: books.map((book) => ({
           id: book.id,
-          type: 'book',
+          type: "book",
           title: book.title,
         })),
       };
@@ -97,7 +97,7 @@ class Villain {
         for (let short of shorts) {
           v.appearsIn.push({
             id: short.id,
-            type: 'short',
+            type: "short",
             title: short.title,
           });
         }
@@ -142,7 +142,7 @@ class Villain {
         for (let short of data.shorts.rows) {
           v.appearsIn.push({
             id: short.id,
-            type: 'short',
+            type: "short",
             title: short.title,
           });
         }
@@ -155,7 +155,7 @@ class Villain {
 
   /** Update Villain with `data`
    *
-   * This is a partial update - its fin if data doesnt contain all fields
+   * This is a partial update - its fine if data doesnt contain all fields
    *  This only changes provided ones
    *
    * Data can include: {name,types_id, gender, status}
@@ -163,7 +163,7 @@ class Villain {
 
   static async update(id, data) {
     const { setCols, values } = sqlForPartialUpdate(data, {});
-    const idVarIdx = '$' + (values.length + 1);
+    const idVarIdx = "$" + (values.length + 1);
 
     const querySql = `UPDATE villains
                       SET ${setCols}
